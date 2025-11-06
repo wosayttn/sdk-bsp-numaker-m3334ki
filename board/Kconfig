@@ -1,0 +1,123 @@
+menu "Hardware Drivers Config"
+
+    menu "On-chip Peripheral Drivers"
+        source "./libraries/m3331/rtt_port/Kconfig"
+    endmenu
+
+    menu "On-board Peripheral Drivers"
+
+        config BOARD_USING_NULINKME
+            bool "Enable UART0 for RTT Console.(uart0)"
+            select BSP_USING_UART
+            select BSP_USING_UART0
+            default y
+
+        config BSP_USING_CUSTOM_LOADER
+            bool "Enable Custom Loader for Swapping Flash Bank."
+            select BSP_USING_RMC
+
+        choice
+            prompt "Select HSUSB Ports"
+
+            config BOARD_USING_HSUSBD
+                select BSP_USING_HSUSBD
+                bool "Enable HSUSBD"
+                help
+                    Choose this option if you need HSUSBD function mode.
+
+            config BOARD_USING_HSUSBH
+                select BSP_USING_HSUSBH
+                bool "Enable HSUSBH"
+                help
+                    Choose this option if you need HSUSBH function mode.
+
+            config BOARD_USING_USB_OTG
+                select BSP_USING_OTG
+                bool "Enable HSUSB OTG"
+                help
+                    Choose this option if you need HSUSB Device, Host and H/W OTG function.
+
+            config BOARD_USING_USB_SWOTG
+                select BSP_USING_HSUSBH
+                select BSP_USING_HSUSBD
+                select RT_USING_PIN
+                select RT_USING_ADC
+                select BSP_USING_EADC0
+                bool "Enable HSUSB S/W OTG"
+                help
+                    Choose this option if you need HSUSB Device, Host and S/W OTG function.
+
+            config BOARD_USING_USB_NONE
+                select BSP_USING_USB_NONE
+                bool "Disable HSUSB port"
+                help
+                    Choose this option if you need not USB function.
+        endchoice
+
+
+    endmenu
+
+    menu "Board extended module drivers"
+        config BOARD_USING_NUTFT
+            bool "NuTFT V1.3"
+            default n
+            help
+               Choose this option if you need HSUSBD function mode.
+
+            if BOARD_USING_NUTFT
+                config BOARD_USING_LCD_ILI9341
+                    bool "Enable LCM(Over SPI2)"
+                    select BSP_USING_SPI
+                    select BSP_USING_SPI2
+                    select NU_PKG_USING_ILI9341
+                    select NU_PKG_USING_ILI9341_SPI
+                    #select NU_PKG_ILI9341_WITH_OFFSCREEN_FRAMEBUFFER
+                    select NU_PKG_ILI9341_HORIZONTAL
+                    default y
+
+                    if BOARD_USING_LCD_ILI9341
+                        config BOARD_USING_ILI9341_PIN_BACKLIGHT
+                        hex "Specify the pin index of backlight pin index"
+                            range 0x0 0x7F
+                            default 0x15
+
+                        config BOARD_USING_ILI9341_PIN_RESET
+                        hex "Specify the pin index of reset pin index"
+                            range 0x0 0x7F
+                            default 0x13
+
+                        config BOARD_USING_ILI9341_PIN_DC
+                        hex "Specify the pin index of data&command switching"
+                            range 0x0 0x7F
+                            default 0x12
+                    endif
+
+                config BOARD_USING_NUTFT_ADC_TOUCH
+                    bool "Enable ADC Touching(Over EADC0)"
+                    select BSP_USING_EADC
+                    select BSP_USING_EADC0
+                    select RT_USING_TOUCH
+                    select NU_PKG_USING_ADC_TOUCH
+                    select NU_PKG_USING_ADC_TOUCH_SW
+                    default y
+
+                config BOARD_USING_QSPI_FLASH
+                    bool "Enable QSPI Flash(Over QSPI0)"
+                    select BSP_USING_SPI
+                    select BSP_USING_QSPI
+                    select BSP_USING_QSPI0
+                    select RT_USING_FAL
+                    select RT_USING_SFUD
+                    default y
+
+                config BOARD_USING_NUTFT_BUTTON
+                    bool "Enable BUTTON(UNO_A4, UNO_A5)"
+                    select RT_USING_PIN
+                    default y
+            endif
+
+    endmenu
+
+    source "./libraries/nu_packages/Kconfig"
+
+endmenu
