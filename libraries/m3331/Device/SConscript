@@ -1,0 +1,18 @@
+import rtconfig
+Import('RTT_ROOT')
+from building import *
+
+# get current directory
+cwd = GetCurrentDir()
+
+# The set of source files associated with this SConscript file.
+src = Split("""
+Nuvoton/m3331/Source/startup_m3331.c
+Nuvoton/m3331/Source/system_m3331.c
+""")
+
+path = [cwd + '/Nuvoton/m3331/Include',]
+
+group = DefineGroup('Drivers', src, depend = [''], CPPPATH = path)
+
+Return('group')
