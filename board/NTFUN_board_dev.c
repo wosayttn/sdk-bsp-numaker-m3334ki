@@ -37,7 +37,7 @@ static int rt_hw_spiflash_init(void)
 INIT_COMPONENT_EXPORT(rt_hw_spiflash_init);
 #endif /* BOARD_USING_QSPI_FLASH */
 
-#if defined(BOARD_USING_NUTFT_ADC_TOUCH) && defined(NU_PKG_USING_ADC_TOUCH_SW)
+#if defined(BOARD_USING_NUFUN_ADC_TOUCH) && defined(NU_PKG_USING_ADC_TOUCH_SW)
 
 #include "adc_touch.h"
 #include "touch_sw.h"
@@ -81,7 +81,7 @@ static S_TOUCH_SW sADCTP =
     .switch_to_digital = tp_switch_to_digital,
 };
 
-#endif /* defined(BOARD_USING_NUTFT_ADC_TOUCH) && defined(NU_PKG_USING_ADC_TOUCH_SW) */
+#endif /* defined(BOARD_USING_NUFUN_ADC_TOUCH) && defined(NU_PKG_USING_ADC_TOUCH_SW) */
 
 #if defined(BOARD_USING_LCD_ILI9341) && defined(NU_PKG_USING_ILI9341_SPI)
 
@@ -92,7 +92,7 @@ static S_TOUCH_SW sADCTP =
 
 int rt_hw_ili9341_port(void)
 {
-    if (rt_hw_lcd_ili9341_spi_init("spi2", (void *)RT_NULL) != RT_EOK)
+    if (rt_hw_lcd_ili9341_spi_init("spi1", (void *)RT_NULL) != RT_EOK)
         return -1;
 
     rt_hw_lcd_ili9341_init();
@@ -106,7 +106,8 @@ int rt_hw_ili9341_port(void)
     }
 #endif
 
-#if defined(BOARD_USING_NUTFT_ADC_TOUCH) && defined(NU_PKG_USING_ADC_TOUCH_SW)
+#if defined(BOARD_USING_NUFUN_ADC_TOUCH) && defined(NU_PKG_USING_ADC_TOUCH_SW)
+    rt_err_t nu_adc_touch_sw_register(S_TOUCH_SW * psTouchSW);
     nu_adc_touch_sw_register(&sADCTP);
 #endif
 
@@ -134,5 +135,53 @@ int rt_hw_nau8822_port(void)
 }
 INIT_COMPONENT_EXPORT(rt_hw_nau8822_port);
 #endif /* BOARD_USING_AUDIO_CODEC */
+
+#if defined(BOARD_USING_NUFUN_I2C_TEMPERATURE_SENSOR)
+
+#include "sensor_tmp112.h"
+
+int rt_hw_tmp112_port(void)
+{
+    struct rt_sensor_config cfg;
+
+    cfg.intf.dev_name = "i2c2";
+    cfg.irq_pin.pin = RT_PIN_NONE;
+
+    return rt_hw_tmp112_init("tmp112", &cfg);
+}
+INIT_ENV_EXPORT(rt_hw_tmp112_port);
+#endif /* BOARD_USING_NUFUN_I2C_TEMPERATURE_SENSOR */
+
+#if defined(BOARD_USING_NUFUN_I2C_3AXIS_SENSOR) && defined(NU_PKG_USING_LIS3DH)
+
+#include "st_lis3dh_sensor_v1.h"
+
+int rt_hw_lis3dh_port(void)
+{
+    struct rt_sensor_config cfg;
+
+    cfg.intf.dev_name = "i2c2";
+    cfg.irq_pin.pin = RT_PIN_NONE;
+
+    return rt_hw_lis3dh_init("lis3dh", &cfg);
+}
+INIT_ENV_EXPORT(rt_hw_lis3dh_port);
+#endif /* BOARD_USING_NUFUN_I2C_TEMPERATURE_SENSOR */
+
+#if defined(BOARD_USING_NUFUN_I3C_BAROMETER_SENSOR) && defined(NU_PKG_USING_LPS22HH)
+
+#include "st_lps22hh_sensor_v1.h"
+
+int rt_hw_lps22hh_port(void)
+{
+    struct rt_sensor_config cfg;
+
+    cfg.intf.dev_name = "i3c0";
+    cfg.irq_pin.pin = RT_PIN_NONE;
+
+    return rt_hw_lps22hh_init("lps22hh", &cfg);
+}
+INIT_ENV_EXPORT(rt_hw_lps22hh_port);
+#endif /* BOARD_USING_NUFUN_I2C_TEMPERATURE_SENSOR */
 
 #endif /* defined(BOARD_USING_NUFUN) */

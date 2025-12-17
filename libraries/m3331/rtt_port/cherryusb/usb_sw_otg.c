@@ -40,7 +40,7 @@ typedef enum
 static const uint16_t s_swotg_ccx_threshold[evUSB_ROLE_NONE][2] =
 {
     /* Min / Max CC1+CC2  */
-    {3600,   3800},  /* evUSB_ROLE_DEVICE */
+    {3200,   3800},  /* evUSB_ROLE_DEVICE */
     {400,    600},   /* evUSB_ROLE_HOST */
 };
 

@@ -64,24 +64,10 @@ void nutool_pincfg_deinit_epwm1(void)
 
 void nutool_pincfg_init_eqei0(void)
 {
-#if 0
     SYS->GPA_MFP0 &= ~(SYS_GPA_MFP0_PA3MFP_Msk);
     SYS->GPA_MFP0 |= (SYS_GPA_MFP0_PA3MFP_EQEI0_B);
-    SYS->GPA_MFP1 &= ~(SYS_GPA_MFP1_PA5MFP_Msk | SYS_GPA_MFP1_PA4MFP_Msk);
-    SYS->GPA_MFP1 |= (SYS_GPA_MFP1_PA5MFP_EQEI0_INDEX | SYS_GPA_MFP1_PA4MFP_EQEI0_A);
-
-    GPIO_SetPullCtl(PA, BIT3 | BIT4 | BIT5, GPIO_PUSEL_PULL_UP);
-#else
-    SYS->GPA_MFP0 &= ~(SYS_GPA_MFP0_PA3MFP_Msk);
-    SYS->GPA_MFP0 |= (SYS_GPA_MFP0_PA3MFP_EQEI0_B);
-    SYS->GPA_MFP1 &= ~(SYS_GPA_MFP1_PA5MFP_Msk | SYS_GPA_MFP1_PA4MFP_Msk);
+    SYS->GPA_MFP1 &= ~(SYS_GPA_MFP1_PA4MFP_Msk);
     SYS->GPA_MFP1 |= (SYS_GPA_MFP1_PA4MFP_EQEI0_A);
-
-    GPIO_SetPullCtl(PA, BIT3 | BIT4, GPIO_PUSEL_PULL_UP);
-
-    GPIO_SetMode(PA, BIT5, GPIO_MODE_OUTPUT);
-    PA5 = 0; // Force C to low.
-#endif
 
     return;
 }
@@ -89,7 +75,7 @@ void nutool_pincfg_init_eqei0(void)
 void nutool_pincfg_deinit_eqei0(void)
 {
     SYS->GPA_MFP0 &= ~(SYS_GPA_MFP0_PA3MFP_Msk);
-    SYS->GPA_MFP1 &= ~(SYS_GPA_MFP1_PA5MFP_Msk | SYS_GPA_MFP1_PA4MFP_Msk);
+    SYS->GPA_MFP1 &= ~(SYS_GPA_MFP1_PA4MFP_Msk);
 
     return;
 }
@@ -163,10 +149,14 @@ void nutool_pincfg_deinit_i2s0(void)
 
 void nutool_pincfg_init_i3c0(void)
 {
-    SYS->GPB_MFP0 &= ~(SYS_GPB_MFP0_PB1MFP_Msk | SYS_GPB_MFP0_PB0MFP_Msk);
-    SYS->GPB_MFP0 |= (SYS_GPB_MFP0_PB1MFP_I3C0_SCL | SYS_GPB_MFP0_PB0MFP_I3C0_SDA);
-    SYS->GPC_MFP2 &= ~(SYS_GPC_MFP2_PC9MFP_Msk);
-    SYS->GPC_MFP2 |= (SYS_GPC_MFP2_PC9MFP_I3C0_PUPEN);
+    /* Set multi-function pins for I3C pin */
+    GPIO_ENABLE_SCHMITT_TRIGGER(PB, (BIT0 | BIT1));
+    SET_I3C0_SDA_PB0();
+    SET_I3C0_SCL_PB1();
+
+    /* Use TYPE-A Resistance Connection */
+    PB->PUSEL = ((GPIO_PUSEL_PULL_UP << (0 << 1)) | (GPIO_PUSEL_PULL_UP << (1 << 1)));
+    SET_I3C0_PUPEN_PC9();
 
     return;
 }
@@ -366,27 +356,19 @@ void nutool_pincfg_deinit_spi1(void)
     return;
 }
 
-void nutool_pincfg_init_uart0_rs485(void)
+void nutool_pincfg_init_uart2_rs485(void)
 {
-    /* Set PB12, PB13 to GPIO mode. */
-    SET_GPIO_PB12();
-    SET_GPIO_PB13();
-
-    SYS->GPA_MFP1 &= ~(SYS_GPA_MFP1_PA7MFP_Msk | SYS_GPA_MFP1_PA6MFP_Msk);
-    SYS->GPA_MFP1 |= (SYS_GPA_MFP1_PA7MFP_UART0_TXD | SYS_GPA_MFP1_PA6MFP_UART0_RXD);
-    SYS->GPC_MFP1 &= ~(SYS_GPC_MFP1_PC6MFP_Msk);
-    SYS->GPC_MFP1 |= (SYS_GPC_MFP1_PC6MFP_UART0_nRTS);
+    SET_UART2_RXD_PE9();
+    SET_UART2_TXD_PE8();
+    SET_UART2_nRTS_PD8();
 
     return;
 }
 
-void nutool_pincfg_deinit_uart0_rs485(void)
+void nutool_pincfg_deinit_uart2_rs485(void)
 {
-    SET_GPIO_PB12();
-    SET_GPIO_PB13();
-
-    SYS->GPA_MFP1 &= ~(SYS_GPA_MFP1_PA7MFP_Msk | SYS_GPA_MFP1_PA6MFP_Msk);
-    SYS->GPC_MFP1 &= ~(SYS_GPC_MFP1_PC6MFP_Msk);
+    SYS->GPE_MFP2 &= ~(SYS_GPE_MFP2_PE8MFP_Msk | SYS_GPE_MFP2_PE9MFP_Msk);
+    SYS->GPD_MFP2 &= ~(SYS_GPD_MFP2_PD8MFP_Msk);
 
     return;
 }
@@ -470,7 +452,7 @@ void nutool_pincfg_deinit_hsusb(void)
 
 void nutool_pincfg_init_eadc(void)
 {
-#if defined(BOARD_USING_NUFUN)
+#if defined(BOARD_USING_NUFUN_ADC_TOUCH)
     GPIO_SetMode(PB, BIT2 | BIT3 | BIT4 | BIT5, GPIO_MODE_INPUT);
 
     SYS->GPB_MFP0 &= ~(SYS_GPB_MFP0_PB2MFP_Msk | SYS_GPB_MFP0_PB2MFP_Msk);
@@ -478,7 +460,11 @@ void nutool_pincfg_init_eadc(void)
 
     SYS->GPB_MFP1 &= ~(SYS_GPB_MFP1_PB4MFP_Msk | SYS_GPB_MFP1_PB5MFP_Msk);
     SYS->GPB_MFP1 |= (SYS_GPB_MFP1_PB4MFP_EADC0_CH4 | SYS_GPB_MFP1_PB5MFP_EADC0_CH5);
+
+    GPIO_DISABLE_DIGITAL_PATH(PB,  BIT2 | BIT3 | BIT4 | BIT5);
 #endif
+
+    GPIO_SetMode(PB, BIT6 | BIT7, GPIO_MODE_INPUT);
 
     SYS->GPB_MFP1 &= ~(SYS_GPB_MFP1_PB6MFP_Msk | SYS_GPB_MFP1_PB7MFP_Msk);
     SYS->GPB_MFP1 |= (SYS_GPB_MFP1_PB6MFP_EADC0_CH6 | SYS_GPB_MFP1_PB7MFP_EADC0_CH7);
@@ -525,9 +511,7 @@ void nutool_pincfg_init(void)
     nutool_pincfg_init_qspi0();
     nutool_pincfg_init_sd0();
     nutool_pincfg_init_spi1();
-#if defined(BOARD_USING_RS485)
-    nutool_pincfg_init_uart0_rs485();
-#endif
+    nutool_pincfg_init_uart2_rs485();
 #elif defined(BOARD_USING_NUTFT)
     expansion_nutft_pin_init();
 #endif
@@ -561,9 +545,7 @@ void nutool_pincfg_deinit(void)
     nutool_pincfg_deinit_qspi0();
     nutool_pincfg_deinit_sd0();
     nutool_pincfg_deinit_spi1();
-#if defined(BOARD_USING_RS485)
-    nutool_pincfg_deinit_uart0_rs485();
-#endif
+    nutool_pincfg_deinit_uart2_rs485();
 #elif defined(BOARD_USING_NUTFT)
     /* No de-initialization code is required for NuTFT pins */
 #endif

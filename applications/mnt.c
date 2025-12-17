@@ -32,6 +32,14 @@
     #include <fal.h>
 #endif
 
+#ifdef RT_USING_DFS_MNTTABLE
+const struct dfs_mount_tbl mount_table[] =
+{
+    { "sd0p0", "/", "elm", 0, RT_NULL },
+    {0},
+};
+#endif
+
 #if defined(BOARD_USING_QSPI_FLASH)
 #define PARTITION_NAME_FILESYSTEM "filesystem"
 #define MOUNT_POINT_SPIFLASH0 "/"
@@ -60,7 +68,7 @@ exit_mnt_init_spiflash0:
 
     return 0;
 }
-INIT_APP_EXPORT(mnt_init_spiflash0);
+//INIT_APP_EXPORT(mnt_init_spiflash0);
 #endif
 
 #endif /* defined(RT_USING_DFS) */

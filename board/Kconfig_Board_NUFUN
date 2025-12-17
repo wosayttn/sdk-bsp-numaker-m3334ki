@@ -22,6 +22,21 @@
         select BSP_USING_I2C
         select BSP_USING_I2C2
         select RT_USING_I2C
+        select NU_PKG_USING_TMP112
+        default y
+
+    config BOARD_USING_NUFUN_I2C_3AXIS_SENSOR
+        bool "Enable I2C 3-AXIS SENSOR(Over I2C2)"
+        select BSP_USING_I2C
+        select BSP_USING_I2C2
+        select RT_USING_I2C
+        select NU_PKG_USING_LIS3DH
+        default y
+
+    config BOARD_USING_NUFUN_I3C_BAROMETER_SENSOR
+        bool "Enable I3C Barometer SENSOR(Over I3C0)"
+        select BSP_USING_I3C0
+        select NU_PKG_USING_LPS22HH
         default y
 
     config BOARD_USING_NUFUN_PWM_RGB_LED
@@ -63,6 +78,15 @@
                 default 0x7A
         endif
 
+    config BOARD_USING_NUFUN_ADC_TOUCH
+        bool "Enable ADC Touching(Over EADC0)"
+        select BSP_USING_EADC
+        select BSP_USING_EADC0
+        select RT_USING_TOUCH
+        select NU_PKG_USING_ADC_TOUCH
+        select NU_PKG_USING_ADC_TOUCH_SW
+        default y
+
     config BOARD_USING_EQEI_MAGNETIC_ENCODER
         bool "Enable Magnetic Encoder (Over EQEI0)"
             select BSP_USING_EQEI
@@ -80,7 +104,7 @@
     config BOARD_USING_NUFUN_LED
         bool "Enable Status LEDs"
             select RT_USING_PIN
-        default n
+        default y
 
     config BOARD_USING_NUFUN_BUTTON
         bool "Enable BUTTONs"
@@ -102,11 +126,11 @@
         default y
 
     config BOARD_USING_RS485
-        bool "Enable RS-485 port(Over UART0)"
+        bool "Enable RS-485 port(Over UART2)"
             select BSP_USING_UART
-            select BSP_USING_UART0
+            select BSP_USING_UART2
             select RT_USING_SERIAL
-        default n
+        default y
 
     config BOARD_USING_AUDIO_CODEC
         bool "Enable Audio Codec(Over I2S0)"

@@ -180,7 +180,9 @@ if GetDepend(['PKG_CHERRYUSB_HOST']):
         src += Glob('port/ehci/usb_glue_ma35d0.c')
     if GetDepend(['PKG_CHERRYUSB_HOST_EHCI_CUSTOM']):
         path += [cwd + '/port/ehci']
+        #path += [cwd + '/port/ohci']
         src += Glob('port/ehci/usb_hc_ehci.c')
+        #src += Glob('port/ohci/usb_hc_ohci.c')
     if GetDepend(['PKG_CHERRYUSB_HOST_DWC2_ST']):
         src += Glob('port/dwc2/usb_hc_dwc2.c')
         src += Glob('port/dwc2/usb_glue_st.c')

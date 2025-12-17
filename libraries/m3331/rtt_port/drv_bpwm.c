@@ -116,7 +116,7 @@ static rt_err_t nu_bpwm_enable(struct rt_device_pwm *device, struct rt_pwm_confi
     else
     {
         BPWM_DisableOutput(pwm_base, 1 << pwm_channel);
-        BPWM_ForceStop(pwm_base, 1 << pwm_channel);
+        //BPWM_ForceStop(pwm_base, 1 << pwm_channel);
     }
 
     return result;

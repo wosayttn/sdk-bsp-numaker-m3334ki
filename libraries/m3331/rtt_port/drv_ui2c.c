@@ -101,11 +101,11 @@ static rt_err_t nu_ui2c_wait_ready_with_timeout(nu_ui2c_t psNuUi2c)
 {
     rt_tick_t start = rt_tick_get();
     uint32_t u32ProtSts;
-    while((u32ProtSts = UI2C_GET_PROT_STATUS(psNuUi2c->base) &
-                     (UI2C_PROTSTS_STARIF_Msk |
-                      UI2C_PROTSTS_ACKIF_Msk |
-                      UI2C_PROTSTS_NACKIF_Msk |
-                      UI2C_PROTSTS_STORIF_Msk)) == 0)
+    while ((u32ProtSts = UI2C_GET_PROT_STATUS(psNuUi2c->base) &
+                         (UI2C_PROTSTS_STARIF_Msk |
+                          UI2C_PROTSTS_ACKIF_Msk |
+                          UI2C_PROTSTS_NACKIF_Msk |
+                          UI2C_PROTSTS_STORIF_Msk)) == 0)
     {
         if ((rt_tick_get() - start) > psNuUi2c->parent.timeout)
         {
@@ -283,7 +283,7 @@ static rt_size_t nu_ui2c_mst_xfer(struct rt_i2c_bus_device *bus,
                     && !ignore_nack)
             {
                 i = 0;
-                LOG_E("Send Address Fail");
+                //LOG_E("Send Address Fail");
                 break;
             }
         }

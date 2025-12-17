@@ -58,6 +58,9 @@ void nutool_modclkcfg_deinit_st(void)
 
 void nutool_modclkcfg_init_sdh0(void)
 {
+    /* Select IP clock source */
+    CLK_SetModuleClock(SDH0_MODULE, CLK_CLKSEL0_SDH0SEL_PLL_DIV2, CLK_CLKDIV0_SDH0(5));
+
     CLK_EnableModuleClock(SDH0_MODULE);
     return;
 }

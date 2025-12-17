@@ -23,8 +23,6 @@ elif CROSS_TOOL == 'keil':
 if os.getenv('RTT_EXEC_PATH'):
     EXEC_PATH = os.getenv('RTT_EXEC_PATH')
 
-CROSS_TOOL='gcc'
-
 BUILD = ''
 #BUILD = 'debug'
 
@@ -63,7 +61,7 @@ if PLATFORM == 'gcc':
         CFLAGS += ' -O2 -gdwarf-2 -g'
         AFLAGS += ' -gdwarf-2'
     else:
-        CFLAGS += ' -O2 -g'
+        CFLAGS += ' -Os -g'
 
     CXXFLAGS = CFLAGS
 

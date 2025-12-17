@@ -213,7 +213,7 @@ static rt_err_t nu_i2c_send_address(nu_i2c_bus_t nu_i2c,
                 != ((flags & RT_I2C_RD) ? NU_I2C_MASTER_STATUS_RECEIVE_ADDRESS_ACK : NU_I2C_MASTER_STATUS_TRANSMIT_ADDRESS_ACK))
                 && !ignore_nack)
         {
-            LOG_E("sending address failed\n");
+            //LOG_E("sending address failed\n");
             return -RT_EIO;
         }
     }
@@ -277,7 +277,7 @@ static rt_size_t nu_i2c_mst_xfer(struct rt_i2c_bus_device *bus,
                     && !ignore_nack)
             {
                 i = 0;
-                LOG_E("Send Address Fail");
+                //LOG_E("Send Address Fail");
                 break;
             }
         }
