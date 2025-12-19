@@ -32,7 +32,7 @@ The NuMaker M3334KI is a microcontroller platform with comprehensive peripheral 
 | Board | Description | Driver supporting status |
 | -- | -- | -- |
 | NUTFT | v1.3 | Supported |
-| NUFUN | v2.0 | Coming soon |
+| NUFUN | v2.0 | Supported |
 
 ## 2. Supported compiler
 
