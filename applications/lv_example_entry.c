@@ -227,19 +227,19 @@ static void keypad_event_cb(lv_event_t *e)
     switch (key)
     {
     case LV_KEY_UP:
-        lv_led_toggle(led1);
+        lv_led_toggle(led4);
         break;
 
     case LV_KEY_DOWN:
-        lv_led_toggle(led2);
-        break;
-
-    case LV_KEY_LEFT:
         lv_led_toggle(led3);
         break;
 
+    case LV_KEY_LEFT:
+        lv_led_toggle(led2);
+        break;
+
     case LV_KEY_RIGHT:
-        lv_led_toggle(led4);
+        lv_led_toggle(led1);
         break;
 
     default:

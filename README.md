@@ -32,7 +32,7 @@ The NuMaker M3334KI is a microcontroller platform with comprehensive peripheral 
 | Board | Description | Driver supporting status |
 | -- | -- | -- |
 | NUTFT | v1.3 | Supported |
-| NUFUN | v2.0 | Supported |
+| NUFUN | v2.1 | Supported |
 
 ## 2. Supported compiler
 
@@ -50,7 +50,7 @@ Notice:
 
 ### Step 1
 
-At first, you need to configure ICESW2 switch on the NuMaker-M2L31KI board. Set the four switches to ‘ON’ position. After the configuration is done, connect the NuMaker-M2L31KI board and your computer using the USB Type-C cable. After that, window manager will show a ‘NuMicro MCU’ virtual disk. Finally, you will use this virtual disk to burn firmware.
+At first, you need to configure VCOM switch on the NuMaker board. Set the four switches to ‘ON’ position. After the configuration is done, connect the NuMaker board and your computer using the USB Type-C cable. After that, window manager will show a ‘NuMicro MCU’ virtual disk. Finally, you will use this virtual disk to burn firmware.
 
 ### Step 2
 
