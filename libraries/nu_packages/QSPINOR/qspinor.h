@@ -24,5 +24,10 @@
 
 void SpiFlash_EnterQspiMode(struct rt_qspi_device *qspi_device);
 void SpiFlash_ExitQspiMode(struct rt_qspi_device *qspi_device);
+rt_err_t SpiFlash_WriteDisable(struct rt_qspi_device *qspi_device);
+rt_err_t SpiFlash_Unprotect(struct rt_qspi_device *qspi_device);
+rt_err_t SpiFlash_Protect(struct rt_qspi_device *qspi_device);
+rt_bool_t SpiFlash_IsWriteEnabled(struct rt_qspi_device *qspi_device);
+rt_uint8_t SpiFlash_GetStatus1(struct rt_qspi_device *qspi_device);
 
 #endif /* __QSPINOR_H__ */

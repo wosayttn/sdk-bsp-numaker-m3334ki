@@ -21,20 +21,51 @@
 
 static int rt_hw_spiflash_init(void)
 {
+#define QSPI_FLASH_DEV_NAME "qspi01"
+
     /* Here, we use Dual I/O to drive the SPI flash by default. */
     /* If you want to use Quad I/O, you can modify to 4 from 2 and crossover D2/D3 pin of SPI flash. */
-    if (nu_qspi_bus_attach_device("qspi0", "qspi01", 4, SpiFlash_EnterQspiMode, SpiFlash_ExitQspiMode) != RT_EOK)
-        return -1;
+    if (nu_qspi_bus_attach_device("qspi0", QSPI_FLASH_DEV_NAME, 4, SpiFlash_EnterQspiMode, SpiFlash_ExitQspiMode) != RT_EOK)
+        return -RT_ERROR;
+
 
 #if defined(RT_USING_SFUD)
-    if (rt_sfud_flash_probe(FAL_USING_NOR_FLASH_DEV_NAME, "qspi01") == RT_NULL)
+    if (rt_sfud_flash_probe(FAL_USING_NOR_FLASH_DEV_NAME, QSPI_FLASH_DEV_NAME) == RT_NULL)
     {
-        return -(RT_ERROR);
+        return -RT_ERROR;
     }
 #endif
     return 0;
 }
 INIT_COMPONENT_EXPORT(rt_hw_spiflash_init);
+
+
+int qspi_flash_unprotect(int argc, char *argv[])
+{
+    struct rt_qspi_device *qspi_dev;
+
+    /* defined the flash WP pin: PC4 */
+#define W25_WP_PIN    NU_GET_PININDEX(NU_PC, 4)
+
+    SYS->GPC_MFP1 &= ~(SYS_GPC_MFP1_PC4MFP_QSPI0_MOSI1);
+
+    /* Configure the flash WP pin */
+    rt_pin_mode(W25_WP_PIN, PIN_MODE_OUTPUT);
+    rt_pin_write(W25_WP_PIN, PIN_HIGH);
+
+    int qspi_unprotect(int argc, char *argv[]);
+    qspi_unprotect(1, NULL);
+
+    /* After unprotected, we can set the WP pin to input mode to save power. */
+    rt_pin_mode(W25_WP_PIN, PIN_MODE_INPUT);
+
+    SYS->GPC_MFP1 |= (SYS_GPC_MFP1_PC4MFP_QSPI0_MOSI1);
+
+    return 0;
+}
+
+MSH_CMD_EXPORT_ALIAS(qspi_flash_unprotect, qflashunp, unprotect QSPI flash);
+
 #endif /* BOARD_USING_QSPI_FLASH */
 
 #if defined(BOARD_USING_NUFUN_ADC_TOUCH) && defined(NU_PKG_USING_ADC_TOUCH_SW)

@@ -306,6 +306,18 @@ void nutool_pincfg_init_qspi0(void)
     SYS->GPC_MFP1 &= ~(SYS_GPC_MFP1_PC5MFP_Msk | SYS_GPC_MFP1_PC4MFP_Msk);
     SYS->GPC_MFP1 |= (SYS_GPC_MFP1_PC5MFP_QSPI0_MISO1 | SYS_GPC_MFP1_PC4MFP_QSPI0_MOSI1);
 
+    /* Enable QSPI0 clock pin (PC2) schmitt trigger */
+    PC->SMTEN |= GPIO_SMTEN_SMTEN2_Msk;
+
+    /* Enable QSPI0 I/O normal slew rate */
+    //GPIO_SetSlewCtl(PC, BIT0 | BIT1 | BIT2 | BIT3 | BIT4 | BIT5, GPIO_SLEWCTL_NORMAL);
+
+    /* Enable QSPI0 I/O high slew rate */
+    GPIO_SetSlewCtl(PC, BIT0 | BIT1 | BIT2 | BIT3 | BIT4 | BIT5, GPIO_SLEWCTL_HIGH);
+
+    /* Enable QSPI0 I/O fast slew rate */
+    //GPIO_SetSlewCtl(PC, BIT0 | BIT1 | BIT2 | BIT3 | BIT4 | BIT5, GPIO_SLEWCTL_FAST);
+
     return;
 }
 
